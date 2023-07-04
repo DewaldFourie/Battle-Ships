@@ -7,9 +7,10 @@ class GameBoard {
         this.cruiser = this.#createShip('cruiser', 3)
         this.submarine = this.#createShip('submarine', 3)
         this.destroyer = this.#createShip('destroyer', 2)
-        this.board = this.#positionShips(this.#createBoard())
+        this.board = this.#createBoard()
         this.missedAttacks = []
         this.successfulAttacks = []
+        this.numOfShipsReady = 0;
     }
 
     // Private method to create a new Ship
@@ -43,64 +44,13 @@ class GameBoard {
         return board
     }
 
-    // Private method to create the ships position for the game board
-    #positionShips(gameBoard){
-        const board = gameBoard
-
-        function placeOnBoard(position, ship, board) {
-            let [x, y, direction] = [...position];
-            let shipLength = ship.length
-
-            while (shipLength > 0) {
-                updateBoardArray(x, y, ship.name, board);
-                shipLength--
-
-                switch(direction) {
-                    case ('north'):
-                        x--
-                        break;
-                    case ('south'):
-                        x++
-                        break;
-                    case ('east'):
-                        y++
-                        break;
-                    case ('west'):
-                        y--
-                        break;
-                }
-            }
-        }
-
-        // function to update the board coordinates with the ship name that is placed there.
-        function updateBoardArray(x, y, shipName, board){
-            board[x][y] = shipName;
-        }
-
-        const ships = this.#getAllShips()
-
-        for (let ship of ships){
-            const position = this.#getPositioning(ship.name);
-            placeOnBoard(position, ship, board)
-        }
-
-        return board
+    // position ship at x, y coords
+    positionShip(x, y, shipName) {
+        this.updateBoardArray(Number(x), Number(y), shipName)
     }
 
-    // Private method to set the positioning of the ships
-    #getPositioning(shipName) {
-        switch(shipName){
-            case ('carrier'):
-                return [8, 3, 'north']
-            case ('battleShip'):
-                return [9, 5, 'west']
-            case ('cruiser'):
-                return [0, 4, 'south']
-            case ('submarine'):
-                return [1, 8, 'west']
-            case ('destroyer'):
-                return [0, 0, 'east']
-        }
+    updateBoardArray(x, y, shipName) {
+        this.board[x][y] = shipName
     }
 
     //method returns a copy of the board created in the constructor
@@ -133,9 +83,11 @@ class GameBoard {
 
     //Private method that returns true if all conditions are met to check if attack is valid
     #isValidAttack(x, y){
+        const uniqueMissedAttack = !this.getMissedAttacks().some(([a, b]) => a === x && b === y);
+        const uniqueSuccessfulAttack = !this.getSuccessfulAttacks().some(([a, b]) => a === x && b === y);
         const validCoordinates = (x >= 0 && x <= 9) && (y >= 0 && y <= 9);
         
-        return validCoordinates
+        return uniqueMissedAttack && uniqueSuccessfulAttack && validCoordinates
     }
 
     // method to implement an attack on a ship, will be called with a click
@@ -166,6 +118,16 @@ class GameBoard {
         else {
             return "invalid attack";
         }
+    }
+
+    areAllShipsSunk(){
+        const ships = this.#getAllShips();
+        for (let ship of ships){
+            if (!ship.sunk){
+                    return false
+            }
+        }
+        return true
     }
 
 }

@@ -36,5 +36,44 @@ describe('game board activities', () => {
     test('recognizes invalid attack coordinates', () => {
         expect(attack3).toBe('invalid attack');
     })
+
+    const attack4 = battleshipGame.receiveAttack(8, 7)
+    test('recognizes attack coordinates that were used previously', () => {
+        expect(attack4).toBe('invalid attack');
+    })
+
+    const attack5 = battleshipGame.receiveAttack(0, 1);
+    test('recognizes attack that were previously successful', () => {
+        expect(attack5).toBe('invalid attack')
+    })
+
+    test('not all ships have sunk', () => {
+        expect(battleshipGame.areAllShipsSunk()).toBe(false);
+    })
+})
+
+describe('sink all ships on the board', () => {
+    const battleshipGame = new GameBoard;
+
+    function getAllValidAttacks() {
+        const allAttacks = [];
+        for (let i = 0; i <= 9; i++){
+            for (let j = 0; j <= 9; j++){
+                if (correctGameBoard.board[i][j] !== null) {
+                    allAttacks.push([i, j])
+                }
+            }
+        } return allAttacks;
+    }
+
+    const allAttacks = getAllValidAttacks()
+    
+    for (let i of allAttacks){
+        battleshipGame.receiveAttack(i[0], i[1]);
+    }
+
+    test('all ships have sunk', () => {
+        expect(battleshipGame.areAllShipsSunk()).toBe(true)
+    })
 })
 
