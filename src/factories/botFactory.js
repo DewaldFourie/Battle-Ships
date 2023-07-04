@@ -94,7 +94,7 @@ class Bot {
             coordinatesArr.push([xCoord, yCoord]);
 
             for (let i = 1; i < ship.length; i++) {
-                coordinatesArr.push([xCoord + 1, yCoord])
+                coordinatesArr.push([xCoord + i, yCoord])
             }
 
         } else { // otherwise, horizontal
@@ -104,7 +104,7 @@ class Bot {
             coordinatesArr.push([xCoord, yCoord]);
 
             for (let i = 1; i < ship.length; i++) {
-                coordinatesArr.push([xCoord, yCoord + 1])
+                coordinatesArr.push([xCoord, yCoord + i])
             }
         }
 

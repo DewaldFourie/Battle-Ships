@@ -19,8 +19,8 @@ class GameBoard {
         return ship;
     }
 
-    // Private method to get all ships created in constructor
-    #getAllShips(){
+    
+    getAllShips(){
         const ships = [
             this.carrier,
             this.battleShip,
@@ -121,7 +121,7 @@ class GameBoard {
     }
 
     areAllShipsSunk(){
-        const ships = this.#getAllShips();
+        const ships = this.getAllShips();
         for (let ship of ships){
             if (!ship.sunk){
                     return false
