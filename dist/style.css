@@ -97,6 +97,11 @@ footer {
     height: var(--boxSize);
     border-radius: 5px;
     margin: var(--boxMargin);
+    font-size: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 
@@ -241,4 +246,26 @@ button.resetShipyard {
 .graveyardHeader {
     height: 2rem;
     text-align: center;
+}
+
+/* BOT Ships design */
+
+#botCarrier {
+    background-color: #ef476f;
+}
+
+#botBattleShip {
+    background-color: #ffd166;
+}
+
+#botCruiser {
+    background-color: #06d6a0;
+}
+
+#botSubmarine {
+    background-color: #118ab2;
+}
+
+#botDestroyer {
+    background-color: #073b4c;
 }

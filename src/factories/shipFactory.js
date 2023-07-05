@@ -10,6 +10,7 @@ class Ship {
     hit() {
         this.damage += 1;
         this.#isSunk();
+        console.log(this.damage)
     }
 
     #setShipAsSunk() {

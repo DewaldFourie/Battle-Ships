@@ -13,6 +13,7 @@ class Player {
     attackEnemy(coordinatesArr, enemyBoard){
         const [x, y] = [...coordinatesArr];
         const attackFeedback = enemyBoard.receiveAttack(x, y);
+        console.log(attackFeedback);
         return attackFeedback;
     }
 

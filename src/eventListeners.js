@@ -1,5 +1,7 @@
 import { buildMainScreen } from "./components/gameboardUI"
-import { createBot } from './index'
+import { createBot, attack } from './index'
+import { Player } from './factories/playerFactory'
+
 // rotated = vertical
 // not rotated = horizontal
 
@@ -175,10 +177,64 @@ function allowGameStart(btn) {
 
 }
 
-function allowPlayerToAttack() {
-  const botBoard = document.querySelector('.bBoard .boardGrid')
-  console.log(botBoard)
+// testing function to show where enemy ships is for development
+function displayBotShips(bot){
+    console.log(bot.viewBoard())
+    const botBoard = document.querySelector('.bBoard .boardGrid')
+
+    for (let i = 0; i < bot.viewBoard().length; i++) {
+        for (let j = 0; j < bot.viewBoard()[i].length; j++) {
+            const value = bot.viewBoard()[i][j];
+            switch (value) {
+                case 'carrier':
+                    console.log(`Value at [${i}][${j}]: ${value}`);
+                    const carrierCell = botBoard.querySelector(`[data-x="${i}"][data-y="${j}"]`);
+                    carrierCell.setAttribute("id", "botCarrier");
+                    break;
+                case 'battleShip':
+                    console.log(`Value at [${i}][${j}]: ${value}`);
+                    const battleShipCell = botBoard.querySelector(`[data-x="${i}"][data-y="${j}"]`);
+                    battleShipCell.setAttribute("id", "botBattleShip");
+                    break
+                case 'cruiser':
+                    console.log(`Value at [${i}][${j}]: ${value}`);
+                    const cruiserCell = botBoard.querySelector(`[data-x="${i}"][data-y="${j}"]`);
+                    cruiserCell.setAttribute("id", "botCruiser");
+                    break;
+                case 'submarine':
+                    console.log(`Value at [${i}][${j}]: ${value}`);
+                    const submarineCell = botBoard.querySelector(`[data-x="${i}"][data-y="${j}"]`);
+                    submarineCell.setAttribute("id", "botSubmarine");
+                    break;
+                case 'destroyer':
+                    console.log(`Value at [${i}][${j}]: ${value}`);
+                    const destroyerCell = botBoard.querySelector(`[data-x="${i}"][data-y="${j}"]`);
+                    destroyerCell.setAttribute("id", "botDestroyer");
+                    break;
+            }
+        }
+    }
+
 }
 
-export { applyDragDrop, allowPlayerToAttack }
+function allowPlayerToAttack(player, board) {
+    const botBoard = document.querySelector('.bBoard .boardGrid')
+    console.log(botBoard);
+    const botCells = botBoard.querySelectorAll('.box');
+    botCells.forEach(cell => {
+        cell.addEventListener('click', () => {
+            const x = cell.getAttribute('data-x');
+            const y = cell.getAttribute('data-y');
+            console.log(`Cell at [${x}][${y}] clicked.`);
+            if (player.attackEnemy([x, y], board) === "It's a hit!"){
+                cell.innerText = "X"
+            }
+            else {
+                cell.innerText = "*"
+            } 
+            
+        });
+    });
+}
+export { applyDragDrop, allowPlayerToAttack, displayBotShips }
 

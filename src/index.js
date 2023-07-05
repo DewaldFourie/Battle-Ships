@@ -1,5 +1,5 @@
 
-import { applyDragDrop, allowPlayerToAttack } from "./eventListeners";
+import { applyDragDrop, allowPlayerToAttack, displayBotShips } from "./eventListeners";
 import { createPlayerBoardUI } from "./components/gameboardUI";
 import { simulateDragDrop } from "./components/utilities";
 import { Bot } from "./factories/botFactory";
@@ -19,9 +19,11 @@ simulateDragDrop();
 function createBot() {
     const bot = new Bot;
     bot.positionAllShips();
-    console.log(bot.viewBoard())
-
-    allowPlayerToAttack()
+    // helper function to show enemy ships for testing
+    displayBotShips(bot)
+    allowPlayerToAttack(p1, bot.board)
 }
+
+
 
 export { createBot }

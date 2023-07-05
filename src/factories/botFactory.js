@@ -74,7 +74,9 @@ class Bot {
         allShips.forEach(ship => {
             const newCoordinatesArr = this.#generateCoordinates(ship)
 
-            newCoordinatesArr.forEach(coord => this.board.positionShip(coord[0], coord[1], ship.name))
+            newCoordinatesArr.forEach(coord => {
+                this.board.positionShip(coord[0], coord[1], ship.name);
+            })
         })
     }
 
@@ -114,7 +116,7 @@ class Bot {
 
         // return if valid coordinates, otherwise find new ones
         if (isValid) return coordinatesArr
-        else { this.#generateCoordinates(ship) }
+        else return this.#generateCoordinates(ship) 
     }
 }
 
