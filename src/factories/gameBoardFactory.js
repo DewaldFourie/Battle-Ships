@@ -86,8 +86,9 @@ class GameBoard {
         const uniqueMissedAttack = !this.getMissedAttacks().some(([a, b]) => a === x && b === y);
         const uniqueSuccessfulAttack = !this.getSuccessfulAttacks().some(([a, b]) => a === x && b === y);
         const validCoordinates = (x >= 0 && x <= 9) && (y >= 0 && y <= 9);
-        
+
         return uniqueMissedAttack && uniqueSuccessfulAttack && validCoordinates
+
     }
 
     // method to implement an attack on a ship, will be called with a click
@@ -95,29 +96,33 @@ class GameBoard {
         // check if there is a ship at x, y
         // if yes, apply damage to this.ship & record successful attack
         // if not, record the coordinates of the missed attack
-        if (this.#isValidAttack(x,y)) {
-            const board = this.getBoard()
-            const ships = {
-                'carrier': this.carrier,
-                'battleShip': this.battleShip,
-                'cruiser': this.cruiser,
-                'submarine': this.submarine,
-                'destroyer': this.destroyer
+
+            if (this.#isValidAttack(x, y)) {
+                const board = this.getBoard()
+                const ships = {
+                    'carrier': this.carrier,
+                    'battleShip': this.battleShip,
+                    'cruiser': this.cruiser,
+                    'submarine': this.submarine,
+                    'destroyer': this.destroyer
+                }
+                
+                
+                if (board[x][y] !== null) {
+                    ships[board[x][y]].hit();
+                    this.#storeSuccessfulAttack(x, y);
+                    return "It's a hit!"
+                }
+                else {
+                    this.#storeMissedAttack(x, y);
+                    return "It's a miss!"
+                }
+            
+            } 
+            else {
+                return "invalid attack";
             }
 
-            if (board[x][y] !== null) {
-                ships[board[x][y]].hit();
-                this.#storeSuccessfulAttack(x, y);
-                return "It's a hit!"
-            }
-            else {
-                this.#storeMissedAttack(x, y);
-                return "It's a miss!"
-            }
-        } 
-        else {
-            return "invalid attack";
-        }
     }
 
     areAllShipsSunk(){
@@ -129,7 +134,7 @@ class GameBoard {
         }
         return true
     }
-
+    
 }
 
 export default GameBoard

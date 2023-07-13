@@ -11,7 +11,7 @@ function simulateDragDrop() {
     const submarine = document.querySelector('#submarine');
     const submarineElem = document.querySelector('[data-x="6"][data-y="4"]');
 
-    const battleship = document.querySelector('#battleship');
+    const battleship = document.querySelector('#battleShip');
     const battleshipElem = document.querySelector('[data-x="2"][data-y="1"]');
 
     const destroyer = document.querySelector('#destroyer');

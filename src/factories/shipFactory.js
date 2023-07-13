@@ -13,12 +13,12 @@ class Ship {
         console.log(this.damage)
     }
 
-    #setShipAsSunk() {
+    setShipAsSunk() {
         this.sunk = true
     }
 
     #isSunk() {
-        if (this.damage === this.length) {this.#setShipAsSunk()};  
+        if (this.damage === this.length) {this.setShipAsSunk()};  
     }
 
 }

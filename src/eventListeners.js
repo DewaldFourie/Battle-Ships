@@ -1,6 +1,5 @@
-import { buildMainScreen } from "./components/gameboardUI"
-import { createBot, attack } from './index'
-import { Player } from './factories/playerFactory'
+import { buildMainScreen, showBotBoard, displayGameResults } from "./components/gameboardUI"
+import { createBot, p1 } from './index'
 
 // rotated = vertical
 // not rotated = horizontal
@@ -88,9 +87,12 @@ function applyDragDrop(board) {
             populateNextBox(event.target, shipLength, isRotated)
             removeFromShipyard(shipName)
             board.numOfShipsReady++
+            toggleResetShipsBtn()
 
             // if all ships are positioned on the board, then allow user to start the game
-            if (board.numOfShipsReady === 5) toggleBeginBattleBtn()
+            if (board.numOfShipsReady === 5) {
+                toggleBeginBattleBtn()
+            }
         }
         event.target.classList.remove("hovered")
     }
@@ -154,6 +156,11 @@ function allowRotate() {
 
 function toggleBeginBattleBtn() {
     const btn = document.querySelector('button.beginBattle')
+    const shipYard = document.querySelector('.shipyard');
+    const introHeading = document.querySelector('.introHeading');
+    introHeading.innerText = 'Ready! Press Start to Begin.'
+    shipYard.style.display = 'none'
+
     if (!btn.style.display) {
         btn.style.display = 'flex'
         allowGameStart(btn)
@@ -161,80 +168,165 @@ function toggleBeginBattleBtn() {
     else { btn.style.display = 'none'}
 }
 
-function resetShips() {
-    // display ships again
-    // allow draggable 
-    // empty the board array
-    // empty the board grid
-    // hide begin battle button
+function toggleResetShipsBtn(){
+    const btn = document.querySelector('button.resetShipyard')
+
+    if (btn.style.display) {
+        btn.style.display = 'flex'
+        resetShips(btn)
+    }
+    else { btn.style.display = 'none'}
+}
+
+
+function resetShips(btn) {
+    btn.addEventListener('click', e => {
+        location.reload()
+    })
 }
 
 function allowGameStart(btn) {
     btn.addEventListener('click', e => {
         buildMainScreen()
-        createBot()
+        const bot = createBot()
+        // start with players turn
+        allowPlayerAttack(p1, bot)
     })
+}
 
+function allowTakingTurns(p1, bot, turn, prevTurn){
+    console.log('current turn:', turn);
+
+    function checkIfAllShipsSunk(){
+        const p1Ships = p1.board.areAllShipsSunk();
+        const botShips = bot.board.areAllShipsSunk();
+        return p1Ships || botShips
+    }
+
+    if (checkIfAllShipsSunk() === false) {
+        if (turn === "p1"){
+            enableBotBoardEvents();        
+        } else if (turn === "bot"){
+            setTimeout(() => allowBotAttack(p1, bot), 200);
+        }
+        
+    } else {
+        setTimeout(() => displayGameResults(prevTurn), 1000);
+    }
+}
+
+function switchTurns(p1, bot, previousTurn){
+    if (previousTurn === "p1") {
+        disableBotBoardEvents();
+        allowTakingTurns(p1, bot, "bot", previousTurn);
+    } else if (previousTurn === "bot"){
+        allowTakingTurns(p1, bot, "p1", previousTurn);
+    }
 }
 
 // testing function to show where enemy ships is for development
 function displayBotShips(bot){
-    console.log(bot.viewBoard())
-    const botBoard = document.querySelector('.bBoard .boardGrid')
+    showBotBoard(bot);
+}
 
-    for (let i = 0; i < bot.viewBoard().length; i++) {
-        for (let j = 0; j < bot.viewBoard()[i].length; j++) {
-            const value = bot.viewBoard()[i][j];
-            switch (value) {
-                case 'carrier':
-                    console.log(`Value at [${i}][${j}]: ${value}`);
-                    const carrierCell = botBoard.querySelector(`[data-x="${i}"][data-y="${j}"]`);
-                    carrierCell.setAttribute("id", "botCarrier");
-                    break;
-                case 'battleShip':
-                    console.log(`Value at [${i}][${j}]: ${value}`);
-                    const battleShipCell = botBoard.querySelector(`[data-x="${i}"][data-y="${j}"]`);
-                    battleShipCell.setAttribute("id", "botBattleShip");
-                    break
-                case 'cruiser':
-                    console.log(`Value at [${i}][${j}]: ${value}`);
-                    const cruiserCell = botBoard.querySelector(`[data-x="${i}"][data-y="${j}"]`);
-                    cruiserCell.setAttribute("id", "botCruiser");
-                    break;
-                case 'submarine':
-                    console.log(`Value at [${i}][${j}]: ${value}`);
-                    const submarineCell = botBoard.querySelector(`[data-x="${i}"][data-y="${j}"]`);
-                    submarineCell.setAttribute("id", "botSubmarine");
-                    break;
-                case 'destroyer':
-                    console.log(`Value at [${i}][${j}]: ${value}`);
-                    const destroyerCell = botBoard.querySelector(`[data-x="${i}"][data-y="${j}"]`);
-                    destroyerCell.setAttribute("id", "botDestroyer");
-                    break;
-            }
+// function to display ship[s that have sunk 
+function updateSunkShips(turn, graveYard, sunkShips){
+    const ships = turn.board.getAllShips();
+    console.log (ships);
+    for (let ship of ships){
+        if (ship.sunk && !sunkShips.includes(ship.name)) {
+            const shipElement = document.createElement('div');
+            sunkShips.push(ship.name);
+            shipElement.innerText = ship.name.toUpperCase();
+            graveYard.appendChild(shipElement);
         }
+    }
+
+    console.log(sunkShips)
+}
+
+
+function allowPlayerAttack(p1, bot) {
+    const boxes = document.querySelectorAll('.bBoard .boardGrid .box')
+    const bGraveYard = document.querySelector('.bSunkShips');
+    let botSunkShips = []
+
+    boxes.forEach(box => {
+        // hover
+        box.addEventListener('mouseover', e => {
+            e.target.style.borderColor = 'red';
+            e.target.style.cursor = 'crosshair';
+        })
+
+        // mouse hover leaves
+        box.addEventListener('mouseleave', e => {
+            e.target.style.borderColor = ''
+        })
+
+        // attack is made
+        box.addEventListener('click', e => {
+            console.log(e)
+            const coords = [Number(e.target.dataset.x), Number(e.target.dataset.y)]
+
+            const attackFeedback = p1.attackEnemy(coords, bot.board)
+            console.log(attackFeedback)
+            if (attackFeedback === "It's a miss!") {
+                e.target.classList.add('miss')
+            } else if (attackFeedback === "It's a hit!") {
+                e.target.classList.add('hit')
+            }
+
+            updateSunkShips(bot, bGraveYard, botSunkShips)
+
+            e.target.classList.add('permanentlyDisabled')
+            switchTurns(p1, bot, 'p1')
+        })
+    })
+}
+
+
+function allowBotAttack(p1, bot) {
+    const pGraveYard = document.querySelector('.pSunkShips');
+    let sunkShips = []
+
+    const coordsArr = bot.getCoordinates();
+    const attackFeedback = bot.attackEnemy(coordsArr, p1.board);
+    console.log(attackFeedback);
+    const boxElem = document.querySelector(`[data-x="${coordsArr[0]}"][data-y="${coordsArr[1]}"]`);
+
+    if (attackFeedback === "invalid attack"){
+        allowBotAttack(p1, bot)
+    }
+    else {
+        if (attackFeedback === "It's a miss!") {
+            boxElem.classList.add("miss")
+        } else if (attackFeedback === "It's a hit!") {
+            pGraveYard.innerText = ''
+            boxElem.classList.add('hit')
+            updateSunkShips(p1, pGraveYard, sunkShips);
+        }
+        switchTurns(p1, bot, 'bot');
     }
 
 }
 
-function allowPlayerToAttack(player, board) {
-    const botBoard = document.querySelector('.bBoard .boardGrid')
-    console.log(botBoard);
-    const botCells = botBoard.querySelectorAll('.box');
-    botCells.forEach(cell => {
-        cell.addEventListener('click', () => {
-            const x = cell.getAttribute('data-x');
-            const y = cell.getAttribute('data-y');
-            console.log(`Cell at [${x}][${y}] clicked.`);
-            if (player.attackEnemy([x, y], board) === "It's a hit!"){
-                cell.innerText = "X"
-            }
-            else {
-                cell.innerText = "*"
-            } 
-            
-        });
-    });
+function disableBotBoardEvents() {
+    const boxes = document.querySelectorAll('.bBoard .boardGrid .box');
+    boxes.forEach(box => {
+        if (!box.classList.contains('permanentlyDisabled')) {
+            box.classList.add('disabled');
+        }
+    })
 }
-export { applyDragDrop, allowPlayerToAttack, displayBotShips }
+
+function enableBotBoardEvents() {
+    const boxes = document.querySelectorAll('.bBoard .boardGrid .box');
+    boxes.forEach(box => {
+        box.classList.remove('disabled');
+    })
+}
+
+
+
+export { applyDragDrop, displayBotShips }
 

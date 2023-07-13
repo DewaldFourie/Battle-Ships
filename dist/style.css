@@ -1,11 +1,15 @@
 :root {
-    --boxSize: 70px;
-    --shipBoxSize: 68px;
+    --boxSize: 50px;
+    --shipBoxSize: 48px;
     --boxMargin: 1px;
     --mediumgray: #afaeae;
     --lightblue: #dff4ff;
     --darkblue: #439acc;
+    --hitPNG: url('../images/hit.png');
+    --missPNG: url('../images/miss.png')
 }
+
+
 
 body {
     margin: 0;
@@ -17,17 +21,20 @@ body {
     justify-content: space-between;
     align-items: center;
     font-family: 'Arial Black', sans-serif;
+    background-color: rgb(43, 87, 124); /*for viewing purpose only*/
 }
 
 button {
     font-family: 'Arial Black', sans-serif;
     border: none;
     cursor: pointer;
+    border-radius: 25px;
 }
 
 header {
     padding-top: 10px;
-    font-size: 50px
+    font-size: 50px;
+    margin-left: var(--boxSize);
 }
 
 footer {
@@ -40,6 +47,16 @@ footer {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+}
+
+.introHeading {
+    margin-left: var(--boxSize);
+    padding: 20px;
+}
+
+.intro-main {
+    display: flex;
+    gap: 50px;
 }
 
 .pBoard,
@@ -81,6 +98,7 @@ footer {
     align-items: center;
     width: var(--boxSize);
     height: var(--boxSize);
+    border: 4px solid transparent;
 }
 
 .boardYHeader .boxHeader {
@@ -97,11 +115,7 @@ footer {
     height: var(--boxSize);
     border-radius: 5px;
     margin: var(--boxMargin);
-    font-size: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+    border: 4px dotted transparent;
 }
 
 
@@ -114,21 +128,54 @@ footer {
     background-color: var(--mediumgray);
 }
 
+.hit {
+    background-image: var(--hitPNG);
+    background-size: fit-content;
+
+}
+
+.miss {
+    background-image: var(--missPNG);
+    background-size: fit-content;
+
+    /* add noise effect */
+}
+
+.disabled {
+    pointer-events: none;
+}
+
+.permanentlyDisabled {
+    pointer-events: none;
+}
+
 /* ships */
 .shipyard {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    width: 500px;
+    padding: 40px 20px;
 }
 
 .shipComponents {
-    height: calc(var(--shipBoxSize) * 5);
+    height: auto;
     display: flex;
-    column-gap: 10px;
+    gap:40px;
     justify-content: center;
     align-items: center;
+    padding: 20px 20px;
+    margin-top: 20px;
 } 
+
+.shipComponents-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    
+}
+
 
 .ship {
     height: var(--shipBoxSize);
@@ -151,12 +198,12 @@ footer {
     background-color: #ef476f;
 }
 
-#battleship {
+#battleShip {
     width: calc(var(--shipBoxSize) * 4);
 }
 
-#battleship, 
-.box.battleship {
+#battleShip, 
+.box.battleShip {
     background-color: #ffd166;
 }
 
@@ -184,6 +231,11 @@ footer {
     background-color: #073b4c;
 }
 
+.btnContainer {
+    padding-top: 20px;
+    display: flex;
+    gap: 20px;
+}
 
 button.beginBattle {
     display: none;
@@ -193,6 +245,7 @@ button.beginBattle {
     align-items: center;
     font-size: 1.2rem;
     color: var(--darkblue);
+    margin-left: var(--boxSize);
 }
 
 button.resetShipyard {
@@ -204,10 +257,10 @@ button.resetShipyard {
     font-size: 1.2rem;
 }
 
-.main, 
-.outro {
+.main {
     display: none;
-}
+    position: relative;
+} 
 
 
 /*MAIN SCREEN*/
@@ -248,24 +301,37 @@ button.resetShipyard {
     text-align: center;
 }
 
-/* BOT Ships design */
+/* OUTRO SCREEN */
 
-#botCarrier {
-    background-color: #ef476f;
+.outro {
+    display: none;
+    position: absolute;
+    background-color: #2f2b23;
+    align-items: center;
+    justify-content: center;
+    left:  30%;
+    right: 30%;
+    bottom: 30%;
+    top: 30%;
+    margin: 10px;
+    padding: 10px;
+    color: white;
+    font-size: large;
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+    border-radius: 100px;
+}  
+
+.outroContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
-#botBattleShip {
-    background-color: #ffd166;
+.outroHead {
+    font-size: 40px;
 }
 
-#botCruiser {
-    background-color: #06d6a0;
-}
-
-#botSubmarine {
-    background-color: #118ab2;
-}
-
-#botDestroyer {
-    background-color: #073b4c;
+.outroBody {
+    font-size: 25px;
 }

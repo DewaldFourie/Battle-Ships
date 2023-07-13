@@ -60,7 +60,8 @@ function buildMainScreen() {
         const mainScreen = document.querySelector('.main');
         mainScreen.style.display = 'flex';
 
-        const pBoard = document.querySelector('.intro .board');
+        const pBoard = document.querySelector('.intro .pBoard');
+        console.log(pBoard);
 
         const playerSide = document.querySelector('.playerSide');
         playerSide.append(pBoard);
@@ -86,4 +87,66 @@ function createPlayerBoardUI() {
     createBoardComponent(pBoard);
 }
 
-export { createBoardComponent, buildMainScreen, createPlayerBoardUI } 
+function showBotBoard(bot){
+    const botBoard = document.querySelector('.bBoard .boardGrid')
+    for (let i = 0; i < bot.viewBoard().length; i++) {
+        for (let j = 0; j < bot.viewBoard()[i].length; j++) {
+            const value = bot.viewBoard()[i][j];
+            switch (value) {
+                case 'carrier':
+                    const carrierCell = botBoard.querySelector(`[data-x="${i}"][data-y="${j}"]`);
+                    carrierCell.setAttribute("id", "botCarrier");
+                    carrierCell.innerText = 'car'
+                    break;
+                case 'battleShip':
+                    const battleShipCell = botBoard.querySelector(`[data-x="${i}"][data-y="${j}"]`);
+                    battleShipCell.setAttribute("id", "botBattleShip");
+                    battleShipCell.innerText = 'bat'
+                    break
+                case 'cruiser':
+                    const cruiserCell = botBoard.querySelector(`[data-x="${i}"][data-y="${j}"]`);
+                    cruiserCell.setAttribute("id", "botCruiser");
+                    cruiserCell.innerText = 'cru'
+                    break;
+                case 'submarine':
+                    const submarineCell = botBoard.querySelector(`[data-x="${i}"][data-y="${j}"]`);
+                    submarineCell.setAttribute("id", "botSubmarine");
+                    submarineCell.innerText = 'sub'
+                    break;
+                case 'destroyer':
+                    const destroyerCell = botBoard.querySelector(`[data-x="${i}"][data-y="${j}"]`);
+                    destroyerCell.setAttribute("id", "botDestroyer");
+                    destroyerCell.innerText = 'des'
+                    break;
+            }
+        }
+    }
+}
+
+function displayGameResults(turn){
+    const outroElem = document.querySelector(".outro");
+    outroElem.style.display = "flex"
+    const outroContainer = document.createElement("div")
+    outroContainer.classList.add("outroContainer")
+    const head = document.createElement("div")
+    head.classList.add("outroHead")
+    head.innerText = "GAME OVER"
+    const bod = document.createElement("div")
+    bod.classList.add("outroBody")
+    let winText = ''
+    if (turn === 'bot'){
+        winText = "The Computer won :("
+    }
+    else {
+        winText = "WELL DONE, YOU WIN !!!"
+    }
+    bod.innerText = winText
+    
+    outroContainer.appendChild(head)
+    outroContainer.appendChild(bod)
+    outroElem.appendChild(outroContainer)
+}
+
+
+
+export { createBoardComponent, buildMainScreen, createPlayerBoardUI, showBotBoard, displayGameResults } 
