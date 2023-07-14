@@ -211,7 +211,7 @@ function allowTakingTurns(p1, bot, turn, prevTurn){
         }
         
     } else {
-        setTimeout(() => displayGameResults(prevTurn), 1000);
+        setTimeout(() => displayGameResults(prevTurn), 500);
     }
 }
 

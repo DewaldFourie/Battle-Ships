@@ -133,6 +133,15 @@ function displayGameResults(turn){
     head.innerText = "GAME OVER"
     const bod = document.createElement("div")
     bod.classList.add("outroBody")
+    const restartGameBtn = document.createElement('button')
+    restartGameBtn.classList.add("restartGameBtn")
+    restartGameBtn.innerText = "PLAY AGAIN"
+    const exitBtn = document.createElement('button');
+    exitBtn.classList.add("exitBtn")
+    exitBtn.innerText = "SHOW BOARDS"
+    const outroBtnContainer = document.createElement("div");
+    outroBtnContainer.classList.add("outroBtnContainer");
+
     let winText = ''
     if (turn === 'bot'){
         winText = "The Computer won :("
@@ -141,9 +150,22 @@ function displayGameResults(turn){
         winText = "WELL DONE, YOU WIN !!!"
     }
     bod.innerText = winText
+
+
+    restartGameBtn.addEventListener("click", () => {
+        location.reload()
+    });
+
+    exitBtn.addEventListener("click", () => {
+        outroElem.style.display = "none"
+    });
     
+    outroBtnContainer.appendChild(restartGameBtn)
+    outroBtnContainer.appendChild(exitBtn)
+
     outroContainer.appendChild(head)
     outroContainer.appendChild(bod)
+    outroContainer.appendChild(outroBtnContainer)
     outroElem.appendChild(outroContainer)
 }
 

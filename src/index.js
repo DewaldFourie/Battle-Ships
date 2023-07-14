@@ -17,16 +17,15 @@ function createBot() {
     const bot = new Bot;
     bot.positionAllShips();
     // helper function to show enemy ships for testing
-    displayBotShips(bot);
+    // displayBotShips(bot);
     return bot
 }
 
 // create Player gameboard and player object
 createPlayerBoardUI()
 const p1 = createPlayer()
-console.log(p1.viewBoard());
-// activate event listeners
+
 applyDragDrop(p1.board);
-simulateDragDrop()
+
 
 export { createBot, p1 }
