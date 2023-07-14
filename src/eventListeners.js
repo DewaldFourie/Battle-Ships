@@ -158,7 +158,7 @@ function toggleBeginBattleBtn() {
     const btn = document.querySelector('button.beginBattle')
     const shipYard = document.querySelector('.shipyard');
     const introHeading = document.querySelector('.introHeading');
-    introHeading.innerText = 'Ready! Press Start to Begin.'
+    introHeading.innerText = 'Ready !! Press Start to Begin.'
     shipYard.style.display = 'none'
 
     if (!btn.style.display) {
