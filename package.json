@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build": "webpack",
+    "build": "webpack --mode=development",
     "watch": "webpack --watch",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DewaldFourie/Battle-Ships/dist.git"
+    "url": "git+https://github.com/DewaldFourie/Battle-Ships.git"
   },
   "keywords": [],
   "author": "",
