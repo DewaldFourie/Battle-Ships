@@ -1,0 +1,17 @@
+# Battle-Ships
+> Live demo [_here_]
+
+#### A basic battleship program playing against the computer with moderate attacking capabilities.
+#### The program has been developed using TDD practices in Javascript with basic HTML & CSS with a Webpack Foundation. 
+
+
+### By Dewald Fourie 2023
+
+## Technologies used 
+
+* JavaScript
+* HTML
+* CSS
+* Webpack
+* Babel
+
