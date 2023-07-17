@@ -5,8 +5,8 @@
     --mediumgray: #afaeae;
     --lightblue: #dff4ff;
     --darkblue: #439acc;
-    --hitPNG: url('../images/hit.png');
-    --missPNG: url('../images/miss.png')
+    --hitPNG: '../images/hit.png';
+    --missPNG: '../images/miss.png';
 }
 
 
@@ -40,6 +40,9 @@ header {
 
 footer {
     font-family: Arial;
+    color: var(--darkblue);
+    display: flex;
+    margin-left: 50px;
 }
 
 /* INTRO SCREEN */
@@ -388,6 +391,3 @@ button:hover {
     gap: 100px;
 }
 
-.footer {
-    background-color: #073b4c;
-}
