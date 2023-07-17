@@ -26,6 +26,6 @@ createPlayerBoardUI()
 const p1 = createPlayer()
 
 applyDragDrop(p1.board);
-
+// simulateDragDrop()
 
 export { createBot, p1 }

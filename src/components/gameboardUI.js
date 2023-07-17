@@ -158,6 +158,17 @@ function displayGameResults(turn){
 
     exitBtn.addEventListener("click", () => {
         outroElem.style.display = "none"
+        const main = document.querySelector('.main');
+        main.style.opacity = ''
+        const playAgain = document.createElement('button')
+        playAgain.classList.add('playAgainBtn')
+        playAgain.innerText = 'PLAY AGAIN'
+
+        playAgain.addEventListener("click", () => {
+            location.reload()
+        })
+
+        main.appendChild(playAgain)
     });
     
     outroBtnContainer.appendChild(restartGameBtn)

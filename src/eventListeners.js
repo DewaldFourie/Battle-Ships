@@ -144,11 +144,13 @@ function allowRotate() {
         if (e.target.dataset.rotated === "true") {
             e.target.style.width = `calc(var(--shipBoxSize) * ${shipLength})`
             e.target.style.height = "var(--shipBoxSize)"
+            e.target.style.writingMode = "horizontal-tb";
             e.target.dataset.rotated = "false"
 
         } else {
             e.target.style.width = "var(--shipBoxSize)"
             e.target.style.height = `calc(var(--shipBoxSize) * ${shipLength})`
+            e.target.style.writingMode = "vertical-lr";
             e.target.dataset.rotated = "true"
         }
     }
@@ -158,7 +160,7 @@ function toggleBeginBattleBtn() {
     const btn = document.querySelector('button.beginBattle')
     const shipYard = document.querySelector('.shipyard');
     const introHeading = document.querySelector('.introHeading');
-    introHeading.innerText = 'Ready !! Press Start to Begin.'
+    introHeading.innerText = 'Press Start to Begin.'
     shipYard.style.display = 'none'
 
     if (!btn.style.display) {
@@ -212,6 +214,8 @@ function allowTakingTurns(p1, bot, turn, prevTurn){
         
     } else {
         setTimeout(() => displayGameResults(prevTurn), 500);
+        const main = document.querySelector('.main');
+        main.style.opacity = '0.2'
     }
 }
 
@@ -288,6 +292,7 @@ function allowPlayerAttack(p1, bot) {
 function allowBotAttack(p1, bot) {
     const pGraveYard = document.querySelector('.pSunkShips');
     let sunkShips = []
+
 
     const coordsArr = bot.getCoordinates();
     const attackFeedback = bot.attackEnemy(coordsArr, p1.board);
