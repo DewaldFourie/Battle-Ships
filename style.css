@@ -1,11 +1,11 @@
 @font-face {
     font-family: 'modernWarfare';
-    src: url('../fonts/MODERN\ WARFARE.ttf');
+    src: url('assets/fonts/MODERN\ WARFARE.ttf');
 }
 
 @font-face {
     font-family: 'normandia';
-    src: url('../fonts/Normandia.ttf');
+    src: url('assets/fonts/Normandia.ttf');
 }
 
 :root {
@@ -15,8 +15,8 @@
     --mediumgray: #afaeae;
     --lightblue: #dff4ff;
     --darkblue: #439acc;
-    --hitPNG: url('../images/hit.png');
-    --missPNG: url('../images/miss.png')
+    --hitPNG: url('assets/images/hit.png');
+    --missPNG: url('assets/images/miss.png');
 }
 
 
