@@ -1,5 +1,5 @@
 # Battle-Ships
-> Live demo [_here_]
+> Live demo [here](https://dewaldfourie.github.io/Battle-Ships/)
 
 #### A basic battleship program playing against the computer with moderate attacking capabilities.
 #### The program has been developed using TDD practices in Javascript with basic HTML & CSS with a Webpack Foundation. 
